@@ -1,2 +1,2 @@
-# guardian-tales-theme
-Guardian Tales Intro Theme for SDDM
+# plastic-memories-theme
+Plastic Memories Opening for SDDM
