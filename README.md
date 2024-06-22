@@ -63,14 +63,13 @@ Please [open an issue](https://github.com/DeffreusTheda/sddm-plastic-memories/is
 ## Developer "Note"
 
 <details><summary>A bit of rant...</summary>
-	This theme is a fork of https://github.com/lll2yu/sddm-lain-wired-theme by lll2yu, btw.
-	It gotten to the point that it's not a fork anymore, I think (?).
-	I spent 3 (holi)days to make this all.
-	Before this, I shared my Isla themed desktop setup in a Discord server, but nobody really liked it.
-	I don't know, I don't felt enough, so here I am with this SDDM theme.
-	It turned out pretty good though, amirite?
-	Got paranoid with copyright infringement at day 2, but I don't think Doga Kobo really care (I hope so @_@).
-	Y291bGQgeW91IHBsZWFzZSBjdXJlIG15IGxvbmVsaW5lc3MgYWFhYWFhYWFhYWFhYWFhYWFhYWEK
+	This theme is a fork of https://github.com/lll2yu/sddm-lain-wired-theme by lll2yu, btw.<br>
+	It gotten to the point that it's not a fork anymore, I think (?).<br>
+	I spent 3 (holi)days to make this all.<br>
+	Before this, I shared my Isla themed desktop setup in a Discord server, but nobody really liked it.<br>
+	I don't know, I don't felt enough, so here I am with this SDDM theme.<br>
+	It turned out pretty good though, amirite?<br>
+	Got paranoid with copyright infringement at day 2, but I don't think Doga Kobo really care (I hope so @_@).<br>
+	Y291bGQgeW91IHBsZWFzZSBjdXJlIG15IGxvbmVsaW5lc3MgYWFhYWFhYWFhYWFhYWFhYWFhYWEK<br>
 	plase help
 </details>
->>>>>>> abbe5d5 (Version 0.1.0)
