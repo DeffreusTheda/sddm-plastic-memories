@@ -1,4 +1,5 @@
 #!/bin/sh
+set -x
 
 infodt() {
 	echo $(tput setaf $1)$2$(tput sgr0)
@@ -35,11 +36,12 @@ fi
 
 #: 3. Automatically edit `/etc/sddm.conf` to use this theme
 infodt 3 "[STATUS] Editing /etc/sddm.conf to use this theme..."
-if sed -i 's:Current=.*:Current=sddm-plastic-memories:' /etc/sddm.conf 2>/dev/null; then
+if [[ ! -f /etc/sddm.conf ]] || [[ -z $(cat /etc/sddm.conf) ]]; then
+	sudo rm /etc/sddm.conf 2>/dev/null
+	sudo touch /etc/sddm.conf
+	echo -e "[Theme]\nCurrent=sddm-plastic-memories" | sudo tee /etc/sddm.conf >/dev/null
+elif sudo sed -i 's:Current=.*:Current=sddm-plastic-memories:' /etc/sddm.conf; then
 	infodt 2 "[SUCCESS] Edited /etc/sddm.conf to use this theme!"
-elif [[ ! -f /etc/sddm.conf ]]; then
-	sudo echo """[Theme]
-Current=plastic-memories-theme""" >/etc/sddm.conf 2>/dev/null
 else
 	infodt 1 "[ERROR] Unknown error executing: sed -i 's:Current=.*:Current=sddm-plastic-memories:' /etc/sddm.conf"
 	exit 1
