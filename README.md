@@ -57,7 +57,7 @@ $EDITOR /usr/share/sddm/themes/sddm-plastic-memories/theme.conf.user
 Run the `test.sh` file
 
 ```sh
-/usr/sha/sddm/themes/sddm-plastic-memories/test.sh
+/usr/share/sddm/themes/sddm-plastic-memories/test.sh
 ```
 
 ## Issues or Bugs ?!
