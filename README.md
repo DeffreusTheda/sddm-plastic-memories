@@ -16,6 +16,7 @@ You can watch the preview video [here](preview.mp4) (WIP)
 Dependencies:
 
 - [`sddm`](https://github.com/sddm/sddm)
+- `git-lfs`
 - `qt5-multimedia`
 - `qt5-quickcontrols`
 - .webm audio and video codecs
@@ -24,16 +25,19 @@ Dependencies:
 #: Clone this theme
 git clone https://github.com/DeffreusTheda/sddm-plastic-memories
 
-#: Run installer
-./sddm-plastic-memories/install.sh
+#: Run installer from repo directory,
+#: as install.sh does use relative path
+cd sddm-plastic-memories
+./install.sh
 ```
 
 What `install.sh` does:
 
-1. Copy theme files to `/usr/share/sddm/themes/sddm-plastic-memories/` directory
-2. Automatically edit `/etc/sddm.conf` to use this theme
-3. Add write permission for `theme.conf.user`
-4. Open `theme.conf.user` with `$EDITOR` or `vi` as fallback
+1. Download the opening video from Git LFS
+2. Copy theme files to `/usr/share/sddm/themes/sddm-plastic-memories/` directory
+3. Automatically edit `/etc/sddm.conf` to use this theme
+4. Add read and write permission for `theme.conf.user`
+5. Open `theme.conf.user` with `$EDITOR` or `vi` as fallback (Optional)
 
 > [!NOTE]
 > Please enter your `sudo` password whenever asked
