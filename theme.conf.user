@@ -20,6 +20,8 @@
 #: Delay before masking the last letter after typing.
 # passwordMaskDelay=0
 
+#: Values: "true" | "false"
+# clockEnabled="true"
 #: The format of the time and dateclock, refer to http://doc.qt.io/qt-5/qml-qtqml-date.html.
 #: Values: Locale.ShortFormat | Locale.LongFormat | custom string e.g. "hh:mm A"
 # timeFormat="hh:mm:ss"

@@ -19,7 +19,9 @@ Dependencies:
 - `git-lfs`
 - `qt5-multimedia`
 - `qt5-quickcontrols`
-- .webm audio and video codecs
+- .mp4 audio and video codecs e.g. gstreamer1 'libav' plugin
+
+On Fedora: `sudo dnf install -y sddm git-lfs qt5-qtmultimedia qt5-qtquickcontrols gstreamer1-plugin-libav`
 
 ```sh
 #: Clone this theme

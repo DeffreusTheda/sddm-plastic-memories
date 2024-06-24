@@ -76,7 +76,7 @@ Rectangle {
 
 	Video {
 		id: openingVideo
-		source: "ring-of-fortune.webm"
+		source: "ring-of-fortune.mp4"
 		autoPlay: true
 
 		width: Window.width
