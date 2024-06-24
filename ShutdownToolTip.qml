@@ -15,22 +15,17 @@
  *  along with this program.  If not, see https://www.gnu.org/licenses/.
  */
 
-import QtQuick 2.5
+import QtQuick 2.15
+import QtQuick.Layouts 1.11
+import QtQuick.Controls 2.15
 
-Rectangle {
+Label {
+	text: "Terminate this Program?"
 	color: "#fcfdfc"
-	width: 210
-	height: 32
-	border.width: 1
-	border.color: "#016ccc"
-	//property string label: "完全消去プログラムを 完了しますか?"
-	property string label: "Terminate this Program?"
-	Text {
-		color: "#3c3635"
-		font.pixelSize : 16
-		text: parent.label
-		anchors.fill: parent
-		verticalAlignment: Text.AlignVCenter
-		horizontalAlignment: Text.AlignHCenter
-	}
+	font.bold: true
+	font.family: config.font
+	font.pixelSize : 16
+
+	verticalAlignment: Text.AlignVCenter
+	horizontalAlignment: Text.AlignHCenter
 }

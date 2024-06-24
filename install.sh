@@ -65,4 +65,6 @@ if [[ ${CONF:-Y} =~ ^[Nn] ]]; then
 elif ! ${EDITOR:?$(tput setaf 1)'[ERROR] EDITOR env not set!'} $THEMEPATH/theme.conf.user; then
 	vi $THEMEPATH/theme.conf.user
 fi
+
+infodt 2 "[SUCCESS] Installation successful!"
 exit 0 #: Success! Yeay!

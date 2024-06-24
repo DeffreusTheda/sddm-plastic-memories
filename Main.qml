@@ -18,8 +18,7 @@
 import QtQuick 2.15
 import QtQuick.Layouts 1.11
 import QtQuick.Controls 2.15
-import QtQuick.Controls.Styles 1.4
-import QtQuick.Window 2.2
+import QtQuick.Window 2.15
 import QtMultimedia 5.5
 import SddmComponents 2.0
 
@@ -30,17 +29,18 @@ Rectangle {
 
 	//: Buildup timers
 	Timer {
-		interval: if (config.buildup == "false") 0; else 12680
+		interval: config.buildup=="false" ? 0 : 12680
 		running: true
 		onTriggered: {
 			centerColumn.visible = true
-			shutdownBtn.visible = true
-			rebootBtn.visible = true
-			session.visible = true
+			shutdown.visible = true
+			reboot.visible = true
+			session.visible = 1
+			clock.visible = config.clockEnabled==="false" ? false : true
 		}
 	}
 	Timer {
-    id: buildupTimer
+		id: buildupTimer
 		interval: 12680; running: true
 		onTriggered: {
 			title.opacity = 1
@@ -94,6 +94,54 @@ Rectangle {
 		}
 	}
 
+	Column {
+		id: clock
+		visible: false
+		spacing: 0
+		x: password.Layout.bottomMargin
+		y: Window.height - height - password.Layout.bottomMargin
+
+		Label {
+			id: timeClock
+			anchors.horizontalCenter: parent.horizontalCenter
+			font.bold: true
+			font.family: config.font
+			font.pointSize: 24
+			color: "#fcfdfc"
+			renderType: Text.QtRendering
+			function updateTime() {
+				text = new Date().toLocaleTimeString(Qt.locale(), config.timeFormat == "long" ? Locale.LongFormat : config.timeFormat !== "" ? config.timeFormat : Locale.ShortFormat)
+			}
+		}
+
+		Label {
+			id: dateClock
+			anchors.horizontalCenter: parent.horizontalCenter
+			font.bold: true
+			font.family: config.font
+			font.pointSize: 16
+			color: "#fcfdfc"
+			renderType: Text.QtRendering
+			function updateTime() {
+				text = new Date().toLocaleDateString(Qt.locale(), config.dateFormat == "short" ? Locale.ShortFormat : config.dateFormat !== "" ? config.dateFormat : Locale.LongFormat)
+			}
+		}
+
+		Timer {
+			interval: 1000
+			repeat: true
+			running: true
+			onTriggered: {
+				dateClock.updateTime()
+				timeClock.updateTime()
+			}
+		}
+		Component.onCompleted: {
+			dateClock.updateTime()
+			timeClock.updateTime()
+		}
+	}
+
 	ColumnLayout {
 		id: centerColumn
 		visible: false
@@ -102,33 +150,37 @@ Rectangle {
 
 		Image {
 			id: title
-			source: if (config.titleLanguage == "English") "title-english.png"; else "title.png"
-			visible: true
+			source: config.titleLanguage==="English" ? "title-english.png" : "title.png"
+
 			opacity: 0
+			fillMode: Image.PreserveAspectFit
 
 			Layout.alignment: Qt.AlignTop
 			Layout.preferredWidth: Window.width * 0.75
 			Layout.preferredHeight: Window.height * 0.75
-			fillMode: Image.PreserveAspectFit
 			anchors.horizontalCenter: parent.horizontalCenter
 		}
 
 		Label {
+			id: welcome
+			height: 50
+
+			property variant messages: [
+				"Welcome home... " + userModel.lastUser,
+				userModel.lastUser + "... Do you... want... me?",
+				userModel.lastUser + "... Your smile looks good"
+			]
+			property var random: (Math.random() * messages.length).toFixed(0)
+			property var index: random===messages.length ? messages.length - 1 : random
+			text: messages[index]
+
 			color: "#fcfdfc"
+			font.bold: true
 			font.family: config.font
 			font.pixelSize: 24
-			font.bold: true
-			property variant messages: [
-				userModel.lastUser + "... Do you... want... me?",
-				userModel.lastUser + "... Your smile looks good",
-				"Welcome home... " + userModel.lastUser
-			]
-			property var index: (Math.random() * messages.length).toFixed(0)
-			text: "Welcome home... Deffreus Theda"
 
 			Layout.alignment: Qt.AlignCenter
 			Layout.bottomMargin: 20
-			height: 50
 		}
 
 		TextField {
@@ -146,7 +198,7 @@ Rectangle {
 
 			Layout.alignment: Qt.AlignHCenter
 
-			KeyNavigation.backtab: shutdownBtn; KeyNavigation.tab: password
+			KeyNavigation.backtab: shutdown; KeyNavigation.tab: password
 			Keys.onPressed: {
 				if (event.key === Qt.Key_Return || event.key === Qt.Key_Enter) {
 					sddm.login(username.text, password.text, session.index)
@@ -171,7 +223,7 @@ Rectangle {
 			}
 		
 			Layout.alignment: Qt.AlignHCenter
-			Layout.bottomMargin: Window.height * 0.05
+		Layout.bottomMargin: Window.height * 0.05
 		
 			KeyNavigation.backtab: username; KeyNavigation.tab: session
 			Keys.onPressed: {
@@ -182,15 +234,39 @@ Rectangle {
 			}
 		}
 	}
+	
+	ComboBox {
+		id: session
+		visible: false
+		model: sessionModel
+		index: sessionModel.lastIndex
+
+		width: 200
+		height: ( username.height + password.height ) / 2
+		x: 20
+		y: 20
+
+		font.bold: true
+		font.family: config.font
+
+		color: "#fcfdfc"
+		borderColor: "#016ccc"
+		focusColor: "#fc4b58"
+		textColor: "#3c3635"
+		arrowIcon: "arrow-icon.png"
+
+		KeyNavigation.backtab: password; KeyNavigation.tab: reboot;
+	}
+
 	AnimatedImage {
-		id: shutdownBtn
+		id: shutdown
 		source: "terminate-icon.png"
 		visible: false
-		height: 40
+		height: 50
 		fillMode: Image.PreserveAspectFit
 
-		y: 20
-		x: Window.width - width - 20
+		y: Window.height - 2 * height
+		x: Window.width - width - height
 
 		MouseArea {
 			anchors.fill: parent
@@ -201,23 +277,23 @@ Rectangle {
 			onEntered: {
 				var component = Qt.createComponent("ShutdownToolTip.qml");
 				if (component.status == Component.Ready) {
-					tooltip = component.createObject(shutdownBtn);
-					tooltip.x = shutdownBtn.width - tooltip.width
-					tooltip.y = shutdownBtn.y + shutdownBtn.height
+					tooltip = component.createObject(shutdown);
+					tooltip.x = -tooltip.width + shutdown.width
+					tooltip.y = -tooltip.height - 10
 				}
 			}
 		}
 	}
 
 	AnimatedImage {
-		id: rebootBtn
+		id: reboot
 		source: "sai-icon.png"
 		visible: false
-		height: shutdownBtn.height
+		height: shutdown.height
 		fillMode: Image.PreserveAspectFit
 
-		y: shutdownBtn.y
-		anchors.right: shutdownBtn.left
+		y: shutdown.y
+		anchors.right: shutdown.left
 		anchors.rightMargin: 20
 
 		MouseArea {
@@ -229,30 +305,12 @@ Rectangle {
 			onEntered: {
 				var component = Qt.createComponent("RebootToolTip.qml")
 				if (component.status == Component.Ready) {
-					tooltip = component.createObject(rebootBtn)
-					tooltip.x = (rebootBtn.width - tooltip.width) / 2
-					tooltip.y = rebootBtn.y + rebootBtn.height
+					tooltip = component.createObject(reboot)
+					tooltip.x = ( reboot.width - tooltip.width ) / 2
+					tooltip.y = -tooltip.height - 10
 				}
 			}
 		}
-	}
-
-	ComboBox {
-		id: session
-		visible: false
-		height: 30
-		width: 200
-		font.family: config.font
-		x: 20
-		y: 20
-		model: sessionModel
-		index: sessionModel.lastIndex
-		color: "#fcfdfc"
-		borderColor: "#016ccc"
-		focusColor: "#fc4b58"
-		textColor: "#3c3635"
-		arrowIcon: "arrow-icon.png"
-		KeyNavigation.backtab: password; KeyNavigation.tab: rebootBtn;
 	}
 
 	Component.onCompleted: {
